@@ -6,8 +6,9 @@ import Navbar from './Navbar'
 import Main from './Main'
 import './App.css'
 
-const tuViellaAddress = "0x5b44ddf0262ece7b2453b01202e567baed58690f"
-const faucetAddress = "0x51099aC96b0F60f5942C320f2372c7Eb10F5ed33"
+const tuViellaAddress = "0xA126412AD78D70E23f2b00e778dB4B1cBC0a0150"
+const faucetAddress   = "0x1675dcc708b023c6Ec8531a477ff466B7235e254"
+
 class App extends Component {
 
   async componentWillMount() {
@@ -21,21 +22,32 @@ class App extends Component {
     const accounts = await web3.eth.getAccounts()
     this.setState({ account: accounts[0] })
 
-    if(tuViellaAddress) {
+    try {
       const tuviellaToken = new web3.eth.Contract(TuviellaToken.abi, tuViellaAddress)
       this.setState({ tuviellaToken })
-      let tuviellaTokenBalance = await tuviellaToken.methods.balanceOf(this.state.account).call()
+      let tuviellaTokenBalance = await tuviellaToken.methods.balanceOf(this.state.account).call(  )
+      let faucetTuviellaTokenBalance = await tuviellaToken.methods.balanceOf(faucetAddress).call(  ) 
       this.setState({ tuviellaTokenBalance: tuviellaTokenBalance.toString() })
-    } else {
+      this.setState({ faucetTuviellaTokenBalance: faucetTuviellaTokenBalance.toString() })
+    } catch(e) {
       window.alert('tuviellaToken contract not deployed to detected network.')
     }
 
-    if(faucetAddress) {
+    try {
       const faucet = new web3.eth.Contract(Faucet.abi, faucetAddress)
       this.setState({ faucet })
-    } else {
+    } catch(e) {
       window.alert('Faucet contract not deployed to detected network.')
     }
+
+  
+    let tuviellaExpiry = await this.state.faucet.methods.getExpiryOf(tuViellaAddress).call()
+    console.log(tuviellaExpiry)
+    let tuviellaSecs = await this.state.faucet.methods.getSecsOf(tuViellaAddress).call()
+    console.log("SECS: " + tuviellaSecs)
+    this.setState({ tuviellaSecs: tuviellaSecs.toString()})
+    
+
 
     this.setState({ loading: false })
   }
@@ -53,9 +65,9 @@ class App extends Component {
     }
   }
 
-  claimTuviella = () => {
+  claimTuviella = async ()  => {
     this.setState({ loading: true })
-      this.state.faucet.methods.claim(faucetAddress).send({from: this.state.account}).on('transactionHash', (hash) => {
+      this.state.faucet.methods.claim(tuViellaAddress).send({from: this.state.account}).on('transactionHash', (hash) => {
         this.setState({ loading: false })
       })
   }
@@ -67,6 +79,9 @@ class App extends Component {
       tuviellaToken: {},
       faucet: {},
       tuviellaTokenBalance: '0',
+      faucetTuviellaTokenBalance: '0',
+      tuviellaExpiry: '0',
+      tuviellaSecs: '0',
       loading: true
     }
   }
@@ -77,7 +92,10 @@ class App extends Component {
       content = <p id="loader" className="text-center">Loading...</p>
     } else {
       content = <Main
-        tuviellaTokenBalance={this.state.tuviellaTokenBalance}
+      tuviellaTokenBalance={this.state.tuviellaTokenBalance}
+      faucetTuviellaTokenBalance={this.state.faucetTuviellaTokenBalance}
+      tuviellaSecs={this.state.tuviellaSecs}
+      tuviellaExpiry={this.state.tuviellaExpiry}
         claimTuviella={this.claimTuviella}
       />
     }

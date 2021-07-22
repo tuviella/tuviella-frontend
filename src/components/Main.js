@@ -1,19 +1,23 @@
 import React, { Component } from 'react'
+import viellaIcon from '../viella.png'
+
 class Main extends Component {
 
   render() {
     return (
       <div id="content" className="mt-3">
-
+        Secs between claims: {this.props.tuviellaSecs.toString()}
         <table className="table table-borderless text-muted text-center">
           <thead>
             <tr>
-              <th scope="col">Balance</th>
+              <th scope="col">Your Balance</th>
+              <th scope="col">Faucet Balance</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td>{window.web3.utils.fromWei(this.props.tuviellaTokenBalance.toString(), 'Ether')} TVT</td>
+            <td>{window.web3.utils.fromWei(this.props.tuviellaTokenBalance.toString(), 'Ether')} <img src={viellaIcon} width="30" height="30" className="d-inline-block align-top" alt="" /></td>
+            <td>{window.web3.utils.fromWei(this.props.faucetTuviellaTokenBalance.toString(), 'Ether')} <img src={viellaIcon} width="30" height="30" className="d-inline-block align-top" alt="" /></td>
             </tr>
           </tbody>
         </table>
