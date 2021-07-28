@@ -6,8 +6,8 @@ import Navbar from './Navbar'
 import Main from './Main'
 import './App.css'
 
-const tuViellaAddress = "0xA126412AD78D70E23f2b00e778dB4B1cBC0a0150"
-const faucetAddress   = "0x1675dcc708b023c6Ec8531a477ff466B7235e254"
+const tuViellaAddress = "0xd6940a18e6E145a5695829268f0A8721d63750D4"
+const faucetAddress   = "0x44124633fe8f24928b1Dbe9Ed38e36f86D511C11"
 
 class App extends Component {
 
@@ -96,7 +96,7 @@ class App extends Component {
       faucetTuviellaTokenBalance={this.state.faucetTuviellaTokenBalance}
       tuviellaSecs={this.state.tuviellaSecs}
       tuviellaExpiry={this.state.tuviellaExpiry}
-        claimTuviella={this.claimTuviella}
+      claimTuviella={this.claimTuviella}
       />
     }
 
