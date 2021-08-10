@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import viellaIcon from '../viella.png'
+import viellaIcon from '../viellahash.png'
 
 class Navbar extends Component {
 
