@@ -65,12 +65,13 @@ class App extends Component {
       window.alert('Staking contract not deployed to detected network.')
     }
 
-    //TODO: Este dato no llega bien :(
     let tuviellaExpiry = await this.state.faucet.methods.getExpiryOf(this.state.account, tuViellaAddress).call()
     let tuviellaSecs = await this.state.faucet.methods.getSecsOf(tuViellaAddress).call()
-    let stakingStakedViellas = await this.state.staking.methods.pendingViellas(0, this.state.account).call()
+    //TODO: THIS SHOULD HAVE THE REAL STAKED AMMOUNT
+    let stakingStakedViellas = await this.state.staking.methods.userInfo(0, this.state.account).call()
     let stakingPendingViellas = await this.state.staking.methods.pendingViellas(0, this.state.account).call()
-    this.setState({ stakingPendingViellas: stakingPendingViellas.toString(), stakingStakedViellas: stakingStakedViellas.toString(),tuviellaExpiry: tuviellaExpiry.toString(), tuviellaSecs: tuviellaSecs.toString()})
+    console.log(stakingPendingViellas> 0);
+    this.setState({ stakingPendingViellas: stakingPendingViellas, stakingStakedViellas: stakingStakedViellas[0],tuviellaExpiry: tuviellaExpiry, tuviellaSecs: tuviellaSecs})
     this.setState({ loading: false })
   }
 
@@ -94,6 +95,7 @@ class App extends Component {
       })
   }
 
+
   depositTuViella = async ()  => {
     this.setState({ loading: true })
       this.state.tuviellaToken.methods.approve(stakingAddress, window.web3.utils.toWei("10", 'Ether')).send({from: this.state.account}).on('receipt', (hash) => {
@@ -109,6 +111,12 @@ class App extends Component {
         this.setState({ loading: false })
     })
   }
+
+  updateExpiry = async ()  => {
+    let tuviellaExpiry = await this.state.faucet.methods.getExpiryOf(this.state.account, tuViellaAddress).call()
+    this.setState({ tuviellaExpiry: tuviellaExpiry })
+  }
+
   constructor(props) {
     super(props)
     this.state = {
@@ -116,12 +124,12 @@ class App extends Component {
       tuviellaToken: {},
       faucet: {},
       staking: {},
-      stakingPendingViellas: '0',
-      stakingStakedViellas: '0',
+      stakingPendingViellas: 0,
+      stakingStakedViellas: 0,
       tuViellaTokenBalance: '0',
       faucetTuViellaTokenBalance: '0',
-      tuviellaExpiry: '0',
-      tuviellaSecs: '0',
+      tuviellaExpiry: 0,
+      tuviellaSecs: 0,
       loading: true,
       chainInUse: undefined
     }
@@ -130,7 +138,7 @@ class App extends Component {
   render() {
     let content
     if(this.state.loading) {
-      content = <p id="loader" className="text-center">Loading...</p>
+      content = <p id="loader" className="text-center">Waiting transacction to be accepted...</p>
     } else {
       content = <Main
       tuviellaTokenBalance={this.state.tuviellaTokenBalance}
@@ -140,6 +148,7 @@ class App extends Component {
       claimTuViella={this.claimTuViella}
       depositTuViella={this.depositTuViella}
       harvestTuViella={this.harvestTuViella}
+      updateExpiry={this.updateExpiry}
       stakingPendingViellas={this.state.stakingPendingViellas}
       stakingStakedViellas={this.state.stakingStakedViellas}
       chainInUse={this.state.chainInUse}
