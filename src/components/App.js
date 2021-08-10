@@ -5,9 +5,11 @@ import Faucet from '../abis/Faucet.json'
 import Navbar from './Navbar'
 import Main from './Main'
 import './App.css'
+import chains from './AvailableChains'
 
-const tuViellaAddress = "0xd6940a18e6E145a5695829268f0A8721d63750D4"
-const faucetAddress   = "0x44124633fe8f24928b1Dbe9Ed38e36f86D511C11"
+const tuViellaAddress = "0x821B794bd6Fd2C696CCB4A36eCfe44ae292C0fBB"
+const faucetAddress   = "0x8c26391Db9a262F6e3cDc25ae881bAe7e6Fa31eB"
+//const stakingAddress   = "0x1d3Ec7C80CE511985670dB3276ab016C49df14Af"
 
 class App extends Component {
 
@@ -18,8 +20,23 @@ class App extends Component {
 
   async loadBlockchainData() {
     const web3 = window.web3
-
     const accounts = await web3.eth.getAccounts()
+    let chainId = await web3.eth.getChainId()
+    let chainInUse
+
+    for (let chainIndex in chains){
+      if(chains[chainIndex].id === chainId){
+        chainInUse = chains[chainIndex]
+      }
+    }
+
+    if(!chainInUse){
+      //TODO: Get 1 of available chain from the ones defined in chains from availableChains file
+      //Try to install chain?
+      window.alert('Your network is not supported, Connect to BSC-TESTNET')
+    }
+    
+    this.setState({ chainInUse })
     this.setState({ account: accounts[0] })
 
     try {
@@ -40,15 +57,10 @@ class App extends Component {
       window.alert('Faucet contract not deployed to detected network.')
     }
 
-  
-    let tuviellaExpiry = await this.state.faucet.methods.getExpiryOf(tuViellaAddress).call()
-    console.log(tuviellaExpiry)
+    //TODO: Este dato no llega bien :(
+    let tuviellaExpiry = await this.state.faucet.methods.getExpiryOf(this.state.account, tuViellaAddress).call()
     let tuviellaSecs = await this.state.faucet.methods.getSecsOf(tuViellaAddress).call()
-    console.log("SECS: " + tuviellaSecs)
-    this.setState({ tuviellaSecs: tuviellaSecs.toString()})
-    
-
-
+    this.setState({ tuviellaExpiry: tuviellaExpiry.toString(), tuviellaSecs: tuviellaSecs.toString()})
     this.setState({ loading: false })
   }
 
@@ -82,7 +94,8 @@ class App extends Component {
       faucetTuviellaTokenBalance: '0',
       tuviellaExpiry: '0',
       tuviellaSecs: '0',
-      loading: true
+      loading: true,
+      chainInUse: undefined
     }
   }
 
@@ -97,12 +110,14 @@ class App extends Component {
       tuviellaSecs={this.state.tuviellaSecs}
       tuviellaExpiry={this.state.tuviellaExpiry}
       claimTuviella={this.claimTuviella}
+      chainInUse={this.state.chainInUse}
       />
     }
 
     return (
       <div>
-        <Navbar account={this.state.account} />
+        <Navbar account={this.state.account}
+         />
         <div className="container-fluid mt-5">
           <div className="row">
             <main role="main" className="col-lg-12 ml-auto mr-auto" style={{ maxWidth: '600px' }}>

@@ -6,18 +6,20 @@ class Main extends Component {
   render() {
     return (
       <div id="content" className="mt-3">
-        Secs between claims: {this.props.tuviellaSecs.toString()}
+        Current Network: {this.props.chainInUse.name}
         <table className="table table-borderless text-muted text-center">
           <thead>
             <tr>
               <th scope="col">Your Balance</th>
               <th scope="col">Faucet Balance</th>
+              <th scope="col">Time left to claim</th>
             </tr>
           </thead>
           <tbody>
             <tr>
             <td>{window.web3.utils.fromWei(this.props.tuviellaTokenBalance.toString(), 'Ether')} <img src={viellaIcon} width="30" height="30" className="d-inline-block align-top" alt="" /></td>
             <td>{window.web3.utils.fromWei(this.props.faucetTuviellaTokenBalance.toString(), 'Ether')} <img src={viellaIcon} width="30" height="30" className="d-inline-block align-top" alt="" /></td>
+            <td>{this.props.tuviellaExpiry} secs</td>
             </tr>
           </tbody>
         </table>
