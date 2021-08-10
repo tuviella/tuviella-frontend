@@ -2,14 +2,15 @@ import React, { Component } from 'react'
 import Web3 from 'web3'
 import TuviellaToken from '../abis/TuviellaToken.json'
 import Faucet from '../abis/Faucet.json'
+import Staking from '../abis/Staking.json'
 import Navbar from './Navbar'
 import Main from './Main'
 import './App.css'
 import chains from './AvailableChains'
 
-const tuViellaAddress = "0x821B794bd6Fd2C696CCB4A36eCfe44ae292C0fBB"
-const faucetAddress   = "0x8c26391Db9a262F6e3cDc25ae881bAe7e6Fa31eB"
-//const stakingAddress   = "0x1d3Ec7C80CE511985670dB3276ab016C49df14Af"
+const tuViellaAddress = "0xEa3F451B1205B8212cd5dD1aE4c54a04fDc652f8"
+const faucetAddress   = "0x0B4C31d0ea1B9a2Dc00529760879625Ca758d8ef"
+const stakingAddress   = "0x7B7EC6bd3068d50B5Ea7970B72CdA2Dc74B11683"
 
 class App extends Component {
 
@@ -57,10 +58,19 @@ class App extends Component {
       window.alert('Faucet contract not deployed to detected network.')
     }
 
+    try {
+      const staking = new web3.eth.Contract(Staking.abi, stakingAddress)
+      this.setState({ staking })
+    } catch(e) {
+      window.alert('Staking contract not deployed to detected network.')
+    }
+
     //TODO: Este dato no llega bien :(
     let tuviellaExpiry = await this.state.faucet.methods.getExpiryOf(this.state.account, tuViellaAddress).call()
     let tuviellaSecs = await this.state.faucet.methods.getSecsOf(tuViellaAddress).call()
-    this.setState({ tuviellaExpiry: tuviellaExpiry.toString(), tuviellaSecs: tuviellaSecs.toString()})
+    let stakingStakedViellas = await this.state.staking.methods.pendingViellas(0, this.state.account).call()
+    let stakingPendingViellas = await this.state.staking.methods.pendingViellas(0, this.state.account).call()
+    this.setState({ stakingPendingViellas: stakingPendingViellas.toString(), stakingStakedViellas: stakingStakedViellas.toString(),tuviellaExpiry: tuviellaExpiry.toString(), tuviellaSecs: tuviellaSecs.toString()})
     this.setState({ loading: false })
   }
 
@@ -77,21 +87,39 @@ class App extends Component {
     }
   }
 
-  claimTuviella = async ()  => {
+  claimTuViella = async ()  => {
     this.setState({ loading: true })
-      this.state.faucet.methods.claim(tuViellaAddress).send({from: this.state.account}).on('transactionHash', (hash) => {
+      this.state.faucet.methods.claim(tuViellaAddress).send({from: this.state.account}).on('receipt', (hash) => {
         this.setState({ loading: false })
       })
   }
 
+  depositTuViella = async ()  => {
+    this.setState({ loading: true })
+      this.state.tuviellaToken.methods.approve(stakingAddress, window.web3.utils.toWei("10", 'Ether')).send({from: this.state.account}).on('receipt', (hash) => {
+        this.state.staking.methods.deposit(0, window.web3.utils.toWei("10", 'Ether')).send({from: this.state.account}).on('receipt', (hash) => {
+          this.setState({ loading: false })
+        })
+    })
+  }
+
+  harvestTuViella = async ()  => {
+    this.setState({ loading: true })
+      this.state.staking.methods.brrr(0).send({from: this.state.account}).on('receipt', (hash) => {
+        this.setState({ loading: false })
+    })
+  }
   constructor(props) {
     super(props)
     this.state = {
       account: '0x0',
       tuviellaToken: {},
       faucet: {},
-      tuviellaTokenBalance: '0',
-      faucetTuviellaTokenBalance: '0',
+      staking: {},
+      stakingPendingViellas: '0',
+      stakingStakedViellas: '0',
+      tuViellaTokenBalance: '0',
+      faucetTuViellaTokenBalance: '0',
       tuviellaExpiry: '0',
       tuviellaSecs: '0',
       loading: true,
@@ -109,7 +137,11 @@ class App extends Component {
       faucetTuviellaTokenBalance={this.state.faucetTuviellaTokenBalance}
       tuviellaSecs={this.state.tuviellaSecs}
       tuviellaExpiry={this.state.tuviellaExpiry}
-      claimTuviella={this.claimTuviella}
+      claimTuViella={this.claimTuViella}
+      depositTuViella={this.depositTuViella}
+      harvestTuViella={this.harvestTuViella}
+      stakingPendingViellas={this.state.stakingPendingViellas}
+      stakingStakedViellas={this.state.stakingStakedViellas}
       chainInUse={this.state.chainInUse}
       />
     }

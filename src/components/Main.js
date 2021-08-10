@@ -7,6 +7,8 @@ class Main extends Component {
     return (
       <div id="content" className="mt-3">
         Current Network: {this.props.chainInUse.name}
+
+        <h2>FAUCET</h2>
         <table className="table table-borderless text-muted text-center">
           <thead>
             <tr>
@@ -32,12 +34,59 @@ class Main extends Component {
               className="btn btn-link btn-block btn-sm"
               onClick={(event) => {
                 event.preventDefault()
-                this.props.claimTuviella()
+                this.props.claimTuViella()
               }}>
                 CLAIM
               </button>
           </div>
         </div>
+
+        <h2>STAKING</h2>
+
+        <table className="table table-borderless text-muted text-center">
+          <thead>
+            <tr>
+              <th scope="col">Staked Viellas</th>
+              <th scope="col">Viellas Pending to Harvest</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+            <td>{window.web3.utils.fromWei(this.props.stakingStakedViellas.toString(), 'Ether')} <img src={viellaIcon} width="30" height="30" className="d-inline-block align-top" alt="" /></td>
+            <td>{window.web3.utils.fromWei(this.props.stakingPendingViellas.toString(), 'Ether')} <img src={viellaIcon} width="30" height="30" className="d-inline-block align-top" alt="" /></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div className="card mb-4" >
+
+          <div className="card-body">
+            <button
+              type="submit"
+              className="btn btn-link btn-block btn-sm"
+              onClick={(event) => {
+                event.preventDefault()
+                this.props.harvestTuViella()
+              }}>
+                HARVEST
+              </button>
+          </div>
+        </div>
+        <div className="card mb-4" >
+
+        <div className="card-body">
+          <button
+            type="submit"
+            className="btn btn-link btn-block btn-sm"
+            onClick={(event) => {
+              event.preventDefault()
+              this.props.depositTuViella()
+            }}>
+              DEPOSIT 10
+            </button>
+          </div>
+        </div>
+
 
       </div>  
     );
