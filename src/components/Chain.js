@@ -7,8 +7,10 @@ class Chain {
   blockExplorerUrl = "-"
   tuviellaTokenAddress = "-"
   faucetAddress = "-"
+  stakingAddress = "-"
+  randomTokenAddress = "-"
 
-  constructor(name, id, symbol, rpcUrl, blockExplorerUrl, tuviellaTokenAddress, faucetAddress){
+  constructor(name, id, symbol, rpcUrl, blockExplorerUrl, tuviellaTokenAddress, faucetAddress, stakingAddress, randomTokenAddress){
     this.name = name
     this.id = id
     this.symbol = symbol
@@ -16,8 +18,9 @@ class Chain {
     this.blockExplorerUrl = blockExplorerUrl
     this.tuviellaTokenAddress = tuviellaTokenAddress
     this.faucetAddress = faucetAddress
-  }
-  
+    this.stakingAddress = stakingAddress
+    this.randomTokenAddress = randomTokenAddress
+  } 
 }
 
 export default Chain;

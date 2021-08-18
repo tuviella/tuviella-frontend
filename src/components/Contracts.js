@@ -1,0 +1,4 @@
+export const mumbaiTuViellaAddress = "0xe0E7251cfC68358C0d9221379d67C9DA9B910c0F"
+export const mumbaiFaucetAddress = "0xC9944aeE9EB51ce2B1ad7ba38a256f3E5F37d3F5"
+export const mumbaiStakingAddress = "0xca3fb9e1978CfbcAfA758e594beF088486df789a"
+export const mumbaiRandomTokenAddress = "0xAD26A00cc932AC58bf043629AE8263CC1d517290"
