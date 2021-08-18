@@ -197,15 +197,15 @@ class App extends Component {
 
   render() {
     let content
-    if(this.state.loading == 'TRANSACTION') {
+    if(this.state.loading === 'TRANSACTION') {
       content = <div><h2>Waiting transaction...</h2><img src={dancingViello} className="d-inline-block align-top" alt="" /></div>
     } 
 
-    if(this.state.loading == 'WEB3') {
+    if(this.state.loading === 'WEB3') {
       content = <div><h2>Loading Page...</h2><img src={dancingViello} className="d-inline-block align-top" alt="" /></div>
     } 
     
-    if(this.state.loading == 'FALSE') {
+    if(this.state.loading === 'FALSE') {
       content = <div>
         <AppInfo chainInUse={this.state.chainInUse}/>
         <Faucet

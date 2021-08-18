@@ -5,20 +5,6 @@ class Staking extends Component {
 
   render() {
 
-    const renderTime = ({ remainingTime }) => {
-      if (remainingTime === 0) {
-        return <div className="timer">Available to Claim</div>;
-      }
-    
-      return (
-        <div className="timer">
-          <div className="text">You can claim in:</div>
-          <div className="value">{remainingTime}</div>
-          <div className="text">seconds</div>
-        </div>
-      );
-    };
-
     let ammountOfViellasToDeposit = 0; 
     let ammountOfViellasToWithdraw = 0; 
 
