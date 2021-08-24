@@ -146,7 +146,7 @@ class App extends Component {
   harvestTuViella = async ()  => {
     this.setState({ loading: 'TRANSACTION'  })
       this.state.staking.methods.brrr(0).send({from: this.state.account}).on('receipt', async (hash) =>  {
-        let stakingPendingViellas = await this.state.staking.methods.pendingViellas(0, this.state.account).call()
+        //let stakingPendingViellas = await this.state.staking.methods.pendingViellas(0, this.state.account).call()
         //this.setState({ loading: 'FALSE', stakingPendingViellas: stakingPendingViellas })
         window.location.reload()
 
@@ -156,7 +156,7 @@ class App extends Component {
   withdrawTuViella = async (ammountToWithdraw)  => {
     this.setState({ loading: 'TRANSACTION'  })
       this.state.staking.methods.withdraw(0, window.web3.utils.toWei(ammountToWithdraw.toString(), 'Ether')).send({from: this.state.account}).on('receipt', async (hash) =>  {
-        let stakingPendingViellas = await this.state.staking.methods.pendingViellas(0, this.state.account).call()
+        //let stakingPendingViellas = await this.state.staking.methods.pendingViellas(0, this.state.account).call()
         //this.setState({ loading: 'FALSE', stakingPendingViellas: stakingPendingViellas })
         window.location.reload()
 
@@ -182,7 +182,7 @@ class App extends Component {
   harvestRandomToken = async ()  => {
     this.setState({ loading: 'TRANSACTION'  })
       this.state.staking.methods.brrr(1).send({from: this.state.account}).on('receipt', async (hash) =>  {
-        let stakingPendingRandomToken = await this.state.staking.methods.pendingViellas(1, this.state.account).call()
+        //let stakingPendingRandomToken = await this.state.staking.methods.pendingViellas(1, this.state.account).call()
         //this.setState({ loading: 'FALSE', stakingPendingRandomToken: stakingPendingRandomToken })
         window.location.reload()
 
@@ -192,7 +192,7 @@ class App extends Component {
   withdrawRandomToken = async (ammountToWithdraw)  => {
     this.setState({ loading: 'TRANSACTION'  })
       this.state.staking.methods.withdraw(1, window.web3.utils.toWei(ammountToWithdraw.toString(), 'Ether')).send({from: this.state.account}).on('confirmation', async (hash) =>  {
-        let stakingPendingRandomToken = await this.state.staking.methods.pendingViellas(1, this.state.account).call()
+        //let stakingPendingRandomToken = await this.state.staking.methods.pendingViellas(1, this.state.account).call()
         //this.setState({ loading: 'FALSE', stakingPendingRandomToken: stakingPendingRandomToken })
         window.location.reload()
 

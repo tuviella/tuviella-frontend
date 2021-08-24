@@ -1,7 +1,5 @@
 import React, { Component } from 'react'
 import viellaIcon from '../viellahash.png'
-import { CountdownCircleTimer } from 'react-countdown-circle-timer'
-
 
 class Faucet extends Component {
 
