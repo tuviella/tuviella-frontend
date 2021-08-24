@@ -107,10 +107,9 @@ class App extends Component {
   addTuviellaToken = async ()  => {
     this.setState({ loading: 'TRANSACTION' })
     try {
-      // wasAdded is a boolean. Like any RPC method, an error may be thrown.
       const provider = window.web3.currentProvider
 
-      const wasAdded = await provider.sendAsync({
+      await provider.sendAsync({
         method: 'wallet_watchAsset',
         params: {
           type: 'ERC20', // Initially only supports ERC20, but eventually more!
