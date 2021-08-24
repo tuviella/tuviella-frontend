@@ -21,6 +21,7 @@ class Chain {
     this.stakingAddress = stakingAddress
     this.randomTokenAddress = randomTokenAddress
   } 
+  
 }
 
 export default Chain;

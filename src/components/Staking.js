@@ -9,7 +9,7 @@ class Staking extends Component {
 
     return (
       <div id="content" className="mt-3">
-        <h2>STAKING {this.props.tokenName.toString()}</h2>
+        <h3>{this.props.tokenName.toString()} - HOTTUB</h3>
 
         <table className="table table-borderless text-muted text-center">
           <thead>

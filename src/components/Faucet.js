@@ -33,7 +33,7 @@ class Faucet extends Component {
     return ( 
     <div id="faucet" className="mt-3">
 
-    <h2>FAUCET</h2>
+    <h3>FAUCET</h3>
     <table className="table table-borderless text-muted text-center">
       <thead>
         <tr>
