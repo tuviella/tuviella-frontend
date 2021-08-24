@@ -27,8 +27,6 @@ class App extends Component {
     let chainId = await web3.eth.getChainId()
     let chainInUse = null
 
-    
-
     for (let chainIndex in chains){
             if(chains[chainIndex].id === chainId){
         chainInUse = chains[chainIndex]
@@ -130,7 +128,8 @@ class App extends Component {
   claimTuViella = async ()  => {
     this.setState({ loading: 'TRANSACTION' })
       this.state.faucet.methods.claim(this.state.chainInUse.tuviellaTokenAddress).send({from: this.state.account}).on('receipt', (hash) => {
-        this.setState({ loading: 'FALSE' })
+        //this.setState({ loading: 'FALSE' })
+        window.location.reload()
       })
   }
 
@@ -138,7 +137,8 @@ class App extends Component {
     this.setState({ loading: 'TRANSACTION'  })
       this.state.tuviellaToken.methods.approve(this.state.chainInUse.stakingAddress, window.web3.utils.toWei(ammountToDeposit.toString(), 'Ether')).send({from: this.state.account}).on('receipt', (hash) => {
         this.state.staking.methods.deposit(0, window.web3.utils.toWei(ammountToDeposit.toString(), 'Ether')).send({from: this.state.account}).on('receipt', (hash) => {
-          this.setState({ loading: 'FALSE' })
+          //this.setState({ loading: 'FALSE' })
+          window.location.reload()
         })
     })
   }
@@ -147,7 +147,9 @@ class App extends Component {
     this.setState({ loading: 'TRANSACTION'  })
       this.state.staking.methods.brrr(0).send({from: this.state.account}).on('receipt', async (hash) =>  {
         let stakingPendingViellas = await this.state.staking.methods.pendingViellas(0, this.state.account).call()
-        this.setState({ loading: 'FALSE', stakingPendingViellas: stakingPendingViellas })
+        //this.setState({ loading: 'FALSE', stakingPendingViellas: stakingPendingViellas })
+        window.location.reload()
+
     })
   }
 
@@ -155,7 +157,9 @@ class App extends Component {
     this.setState({ loading: 'TRANSACTION'  })
       this.state.staking.methods.withdraw(0, window.web3.utils.toWei(ammountToWithdraw.toString(), 'Ether')).send({from: this.state.account}).on('receipt', async (hash) =>  {
         let stakingPendingViellas = await this.state.staking.methods.pendingViellas(0, this.state.account).call()
-        this.setState({ loading: 'FALSE', stakingPendingViellas: stakingPendingViellas })
+        //this.setState({ loading: 'FALSE', stakingPendingViellas: stakingPendingViellas })
+        window.location.reload()
+
     })
   }
 
@@ -168,7 +172,9 @@ class App extends Component {
     this.setState({ loading: 'TRANSACTION'  })
       this.state.randomToken.methods.approve(this.state.chainInUse.stakingAddress, window.web3.utils.toWei(ammountToDeposit.toString(), 'Ether')).send({from: this.state.account}).on('receipt', (hash) => {
         this.state.staking.methods.deposit(1, window.web3.utils.toWei(ammountToDeposit.toString(), 'Ether')).send({from: this.state.account}).on('receipt', (hash) => {
-          this.setState({ loading: 'FALSE' })
+          //this.setState({ loading: 'FALSE' })
+          window.location.reload()
+
         })
     })
   }
@@ -177,21 +183,26 @@ class App extends Component {
     this.setState({ loading: 'TRANSACTION'  })
       this.state.staking.methods.brrr(1).send({from: this.state.account}).on('receipt', async (hash) =>  {
         let stakingPendingRandomToken = await this.state.staking.methods.pendingViellas(1, this.state.account).call()
-        this.setState({ loading: 'FALSE', stakingPendingRandomToken: stakingPendingRandomToken })
+        //this.setState({ loading: 'FALSE', stakingPendingRandomToken: stakingPendingRandomToken })
+        window.location.reload()
+
     })
   }
 
   withdrawRandomToken = async (ammountToWithdraw)  => {
     this.setState({ loading: 'TRANSACTION'  })
-      this.state.staking.methods.withdraw(1, window.web3.utils.toWei(ammountToWithdraw.toString(), 'Ether')).send({from: this.state.account}).on('receipt', async (hash) =>  {
+      this.state.staking.methods.withdraw(1, window.web3.utils.toWei(ammountToWithdraw.toString(), 'Ether')).send({from: this.state.account}).on('confirmation', async (hash) =>  {
         let stakingPendingRandomToken = await this.state.staking.methods.pendingViellas(1, this.state.account).call()
-        this.setState({ loading: 'FALSE', stakingPendingRandomToken: stakingPendingRandomToken })
+        //this.setState({ loading: 'FALSE', stakingPendingRandomToken: stakingPendingRandomToken })
+        window.location.reload()
+
     })
   }
 
   updateExpiry = async ()  => {
     let tuviellaExpiry = await this.state.faucet.methods.getExpiryOf(this.state.account, this.state.chainInUse.tuviellaTokenAddress).call()
     this.setState({ tuviellaExpiry: tuviellaExpiry })
+    
   }
 
   constructor(props) {

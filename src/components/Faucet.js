@@ -7,29 +7,6 @@ class Faucet extends Component {
 
   render() {
 
-    const renderTime = ({ remainingTime }) => {
-      if (remainingTime === 0) {
-        return <div className="timer" margin="auto" ><button
-        disabled={this.props.tuviellaExpiry > 0 }
-        type="submit"
-        className="btn btn-link btn-block btn-sm"
-        onClick={(event) => {
-          event.preventDefault()
-          this.props.claimTuViella()
-        }}>
-          CLAIM
-        </button>
-        </div>;
-      }
-    
-      return (
-        <div className="timer">
-          <div className="text">You can claim in:</div>
-          <div className="value">{(Math.floor(remainingTime / 60)) + ":" +  Math.floor(remainingTime % 60)}</div>
-        </div>
-      );
-    };
-
     return ( 
     <div id="faucet" className="mt-3">
 
@@ -48,21 +25,17 @@ class Faucet extends Component {
         </tr>
       </tbody>
     </table>
-    <CountdownCircleTimer
-          isPlaying={this.props.tuviellaExpiry > 0 ? true : false}
-          initialRemainingTime={this.props.tuviellaExpiry > 0 ? this.props.tuviellaSecs - this.props.tuviellaExpiry : 0}
-          duration={this.props.tuviellaSecs}
-          colors={[
-            ['#DC2700', 0.33],
-            ['#F5EA14', 0.33],
-            ['#F5EA14', 0.33],
+    <button
+            type="submit"
+            className="btn btn-link btn-block btn-sm"
+            disabled={this.props.tuviellaExpiry > 0 }
+            onClick={(event) => {
+              event.preventDefault()
+              this.props.claimTuViella()
+            }}>
+              {this.props.tuviellaExpiry > 0 ? "You can claim in: " + this.props.tuviellaExpiry + " secs" : "CLAIM!"}
+            </button>
 
-          ]}
-          onComplete={""}
-        >
-          {renderTime}
-
-        </CountdownCircleTimer>
   </div>
 
     );
